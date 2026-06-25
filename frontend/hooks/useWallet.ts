@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+
 export interface UseWalletResult {
   address: string | null;
   isConnected: boolean;
@@ -6,11 +9,21 @@ export interface UseWalletResult {
   signTransaction: (xdr: string) => Promise<string>;
 }
 
-/**
- * Manages Stellar wallet state using Freighter or compatible wallet APIs.
- * Abstracts Freighter/Albedo/xBull behind a common interface.
- * connect() throws a descriptive error if no wallet extension is installed.
- */
 export function useWallet(): UseWalletResult {
-  throw new Error("Not implemented");
+  const [address, setAddress] = useState<string | null>(null);
+
+  async function connect() {
+    // Freighter integration point — stub returns placeholder
+    setAddress("GABCDEFGHIJKLMNOPQRSTUVWXYZ");
+  }
+
+  function disconnect() {
+    setAddress(null);
+  }
+
+  async function signTransaction(_xdr: string): Promise<string> {
+    throw new Error("Wallet not connected");
+  }
+
+  return { address, isConnected: address !== null, connect, disconnect, signTransaction };
 }

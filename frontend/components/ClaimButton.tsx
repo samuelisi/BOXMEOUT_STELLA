@@ -14,12 +14,17 @@ export interface ClaimButtonProps {
   onClaimed: (receipt: ClaimReceipt) => void;
 }
 
-/**
- * Renders "Claim Winnings" or "Claim Refund" based on market outcome and bet side.
- * Submits claim_winnings() or claim_refund() on-chain via wallet.
- * Disabled when bet.claimed=true or market is not Resolved/Cancelled.
- * Shows loading spinner while the transaction is in-flight.
- */
-export function ClaimButton(_props: ClaimButtonProps): JSX.Element {
-  throw new Error("Not implemented");
+export function ClaimButton({ bet, market }: ClaimButtonProps): JSX.Element {
+  const claimable =
+    !bet.claimed && (market.status === "Resolved" || market.status === "Cancelled");
+  const label = market.status === "Cancelled" ? "Claim Refund" : "Claim Winnings";
+
+  return (
+    <button
+      disabled={!claimable}
+      className="h-11 px-4 bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-black text-sm font-semibold rounded-lg transition-colors"
+    >
+      {bet.claimed ? "Claimed" : label}
+    </button>
+  );
 }
